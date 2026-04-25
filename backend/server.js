@@ -9,8 +9,12 @@ const authRoutes = require("./routes/authRoutes");
 const { protect } = require("./middleware/authMiddleware");
 const app = express();
 
+
+
 const cors = require("cors");
-app.use(cors());
+app.use(cors({
+  origin: "*",   // for now (safe for student project)
+}));
 
 app.use(express.json()); // VERY IMPORTANT
 //for image uploads

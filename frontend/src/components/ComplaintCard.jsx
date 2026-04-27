@@ -51,7 +51,7 @@ const [showImage, setShowImage] = useState(false);
 {complaint.image && (
 
 <img
- src={`http://localhost:5000/${complaint.image}`}
+  src={`${import.meta.env.VITE_BACKEND_URL}/${complaint.image}`}
  alt="complaint"
  className="rounded-lg w-full max-h-52 object-cover cursor-pointer"
  onClick={() => setShowImage(true)}

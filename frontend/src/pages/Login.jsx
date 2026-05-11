@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -12,6 +13,7 @@ function Login() {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const res = await API.post("/auth/login", {
         email,
         password,
@@ -19,9 +21,10 @@ function Login() {
 
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
-
+      setLoading(false);
       navigate("/dashboard");
     } catch (error) {
+      setLoading(false);
       alert(error.response?.data?.message || "Login failed");
     }
   };
@@ -62,10 +65,16 @@ function Login() {
 
           <button
             type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded font-semibold"
+            disabled={loading}
+            className={`w-full py-2 rounded font-semibold text-white transition ${
+              loading
+                ? "bg-blue-300 cursor-not-allowed"
+                : "bg-blue-500 hover:bg-blue-600"
+            }`}
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </button>
+
           <p className="text-sm text-center mt-4">
             Don't have an account?{" "}
             <a href="/register" className="text-blue-600 font-medium">

@@ -13,6 +13,8 @@ const statusStyles = {
 function AdminPanel() {
   const [complaints, setComplaints] = useState([]);
   const [staffUsers, setStaffUsers] = useState([]);
+  const [staffLoading, setStaffLoading] = useState(true);
+  const [staffLoadFailed, setStaffLoadFailed] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState({});
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
@@ -34,11 +36,16 @@ function AdminPanel() {
 
   const fetchStaffUsers = async () => {
     try {
+      setStaffLoading(true);
+      setStaffLoadFailed(false);
       const res = await API.get("/auth/staff");
       setStaffUsers(res.data);
     } catch (error) {
       console.log(error);
+      setStaffLoadFailed(true);
       toast.error("Failed to load staff members");
+    } finally {
+      setStaffLoading(false);
     }
   };
 
@@ -151,7 +158,15 @@ function AdminPanel() {
                         }
                         className="min-w-44 rounded-lg border border-border-dark bg-bg-surface px-3 py-2 text-xs text-text-primary outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
                       >
-                        <option value="">Assign staff...</option>
+                        <option value="">
+                          {staffLoading
+                            ? "Loading staff..."
+                            : staffLoadFailed
+                              ? "Failed to load staff"
+                              : staffUsers.length === 0
+                                ? "No staff users found"
+                                : "Assign staff..."}
+                        </option>
                         {staffUsers.map((staff) => (
                           <option key={staff._id} value={staff._id}>
                             {staff.name}

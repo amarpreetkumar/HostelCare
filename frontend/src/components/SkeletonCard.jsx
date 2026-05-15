@@ -1,20 +1,12 @@
 function SkeletonCard() {
-
- return (
-
-<div className="bg-white shadow-md rounded-xl p-5 animate-pulse">
-
-<div className="h-4 bg-gray-300 rounded w-3/4 mb-3"></div>
-
-<div className="h-3 bg-gray-300 rounded w-full mb-2"></div>
-<div className="h-3 bg-gray-300 rounded w-5/6 mb-2"></div>
-
-<div className="h-6 bg-gray-300 rounded w-20 mt-4"></div>
-
-</div>
-
- );
-
+  return (
+    <div className="rounded-2xl border border-border-dark bg-bg-card p-5 shadow-card">
+      <div className="skeleton-shimmer mb-3 h-4 w-3/4 rounded" />
+      <div className="skeleton-shimmer mb-2 h-3 w-full rounded" />
+      <div className="skeleton-shimmer mb-2 h-3 w-5/6 rounded" />
+      <div className="skeleton-shimmer mt-4 h-6 w-20 rounded-full" />
+    </div>
+  );
 }
 
 export default SkeletonCard;

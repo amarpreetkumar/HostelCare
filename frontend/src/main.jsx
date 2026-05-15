@@ -6,6 +6,17 @@ import './index.css'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />
-    <Toaster position="top-right" />
+    <Toaster
+      position="bottom-right"
+      toastOptions={{
+        style: {
+          background: "#1A2030",
+          color: "#E8EDF5",
+          border: "1px solid #2A3348",
+          borderRadius: "12px",
+          boxShadow: "0 4px 24px rgba(0,0,0,0.3)",
+        },
+      }}
+    />
   </React.StrictMode>,
 )

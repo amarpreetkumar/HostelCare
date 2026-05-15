@@ -51,6 +51,7 @@ exports.getAllComplaints = async (req, res) => {
 
     const complaints = await Complaint.find()
       .populate("createdBy", "name email")
+      .populate("assignedTo", "name email")
       .sort({ createdAt: -1 });
 
     res.json(complaints);

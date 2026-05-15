@@ -41,7 +41,7 @@ exports.registerUser = async (req, res) => {
 };
 
 //login code 
-  exports.loginUser = async (req, res) => {
+exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -76,6 +76,22 @@ exports.registerUser = async (req, res) => {
       },
     });
 
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getStaffUsers = async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const staff = await User.find({ role: "staff" })
+      .select("_id name email")
+      .sort({ name: 1 });
+
+    res.json(staff);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

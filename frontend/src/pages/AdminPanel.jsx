@@ -12,11 +12,14 @@ const statusStyles = {
 
 function AdminPanel() {
   const [complaints, setComplaints] = useState([]);
+  const [staffUsers, setStaffUsers] = useState([]);
+  const [selectedStaff, setSelectedStaff] = useState({});
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetchComplaints();
+    fetchStaffUsers();
   }, []);
 
   const fetchComplaints = async () => {
@@ -29,9 +32,23 @@ function AdminPanel() {
     }
   };
 
+  const fetchStaffUsers = async () => {
+    try {
+      const res = await API.get("/auth/staff");
+      setStaffUsers(res.data);
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to load staff members");
+    }
+  };
+
   const assignComplaint = async (complaintId) => {
-    const staffId = prompt("Enter Staff User ID");
-    if (!staffId) return;
+    const staffId = selectedStaff[complaintId];
+
+    if (!staffId) {
+      toast.error("Select a staff member first");
+      return;
+    }
 
     try {
       await API.put("/complaints/assign", { complaintId, staffId });
@@ -96,7 +113,7 @@ function AdminPanel() {
 
         <div className="animate-fade stagger-3 overflow-hidden rounded-2xl border border-border-dark bg-bg-card shadow-card">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[760px]">
+            <table className="w-full min-w-[860px]">
               <thead className="bg-bg-secondary">
                 <tr>
                   {["#", "Complaint", "Student", "Status", "Assign To", "Actions"].map((heading) => (
@@ -123,27 +140,37 @@ function AdminPanel() {
                         {complaint.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-text-muted">
-                      {complaint.assignedTo?.name || "Unassigned"}
+                    <td className="px-6 py-4">
+                      <select
+                        value={selectedStaff[complaint._id] || complaint.assignedTo?._id || ""}
+                        onChange={(e) =>
+                          setSelectedStaff((current) => ({
+                            ...current,
+                            [complaint._id]: e.target.value,
+                          }))
+                        }
+                        className="min-w-44 rounded-lg border border-border-dark bg-bg-surface px-3 py-2 text-xs text-text-primary outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
+                      >
+                        <option value="">Assign staff...</option>
+                        {staffUsers.map((staff) => (
+                          <option key={staff._id} value={staff._id}>
+                            {staff.name}
+                          </option>
+                        ))}
+                      </select>
                     </td>
                     <td className="px-6 py-4">
-                      {complaint.status === "pending" ? (
-                        <button
-                          type="button"
-                          onClick={() => assignComplaint(complaint._id)}
-                          className="rounded-lg border border-accent-blue/20 bg-accent-blue/10 px-3 py-1.5 text-xs font-semibold text-accent-blue transition-all duration-150 hover:bg-accent-blue hover:text-white active:scale-[0.97]"
-                        >
-                          Assign
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => assignComplaint(complaint._id)}
-                          className="rounded-lg border border-border-dark bg-bg-surface px-3 py-1.5 text-xs text-text-primary transition-all duration-150 hover:border-accent-blue/40 active:scale-[0.97]"
-                        >
-                          Reassign
-                        </button>
-                      )}
+                      <button
+                        type="button"
+                        onClick={() => assignComplaint(complaint._id)}
+                        className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all duration-150 active:scale-[0.97] ${
+                          complaint.assignedTo
+                            ? "border border-border-dark bg-bg-surface text-text-primary hover:border-accent-blue/40"
+                            : "border border-accent-blue/20 bg-accent-blue/10 text-accent-blue hover:bg-accent-blue hover:text-white"
+                        }`}
+                      >
+                        {complaint.assignedTo ? "Reassign" : "Assign"}
+                      </button>
                     </td>
                   </tr>
                 ))}

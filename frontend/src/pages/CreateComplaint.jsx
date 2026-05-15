@@ -70,13 +70,11 @@ function CreateComplaint() {
                 className="w-full rounded-xl border border-border-dark bg-bg-surface px-4 py-3 text-sm text-text-primary outline-none transition-all focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
               >
                 <option value="">Select category</option>
-                <option>Electricity</option>
-                <option>Water/Plumbing</option>
-                <option>Cleaning</option>
-                <option>Furniture</option>
-                <option>Internet/WiFi</option>
-                <option>Security</option>
-                <option>Other</option>
+                <option value="electricity">Electricity</option>
+                <option value="water">Water/Plumbing</option>
+                <option value="cleaning">Cleaning</option>
+                <option value="internet">Internet/WiFi</option>
+                <option value="other">Other</option>
               </select>
             </div>
 

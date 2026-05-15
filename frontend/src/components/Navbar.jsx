@@ -68,16 +68,23 @@ function Navbar({ onMenuToggle }) {
   };
 
   return (
-    <header className="sticky top-0 z-50 flex h-14 items-center justify-between border-b border-border-dark bg-bg-secondary px-4 md:px-6">
+    <header className="sticky top-0 z-50 flex h-14 items-center justify-between border-b border-border-soft bg-base px-4 md:px-6">
       <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={onMenuToggle}
-          className="rounded-lg border border-border-dark bg-bg-surface p-2 text-text-muted transition-all duration-150 hover:text-text-primary active:scale-[0.97] lg:hidden"
+          className="cursor-pointer rounded-lg border border-border-soft bg-overlay p-2 text-text-mid transition-all duration-150 hover:text-text-high active:scale-[0.97] lg:hidden"
         >
           <Menu size={18} />
         </button>
-        <h1 className="bg-gradient-to-r from-accent-blue to-accent-teal bg-clip-text font-display text-2xl font-semibold text-transparent">
+        <h1
+          className="font-display text-lg font-bold"
+          style={{
+            background: "linear-gradient(135deg,#FF6B35,#FFAA00)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
+        >
           HostelCare
         </h1>
       </div>
@@ -90,36 +97,36 @@ function Navbar({ onMenuToggle }) {
               setNotificationsOpen(!notificationsOpen);
               setProfileOpen(false);
             }}
-            className="relative rounded-lg border border-border-dark bg-bg-surface p-2 text-text-muted transition-all duration-150 hover:text-text-primary active:scale-[0.97]"
+            className="relative cursor-pointer rounded-lg border border-border-soft bg-overlay p-2 text-text-mid transition-all duration-150 hover:text-text-high active:scale-[0.97]"
           >
             <Bell size={18} />
             {unreadCount > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent-red px-1 text-[10px] font-semibold text-white">
+              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-danger px-1 text-[10px] font-semibold text-white">
                 {unreadCount}
               </span>
             )}
           </button>
 
           {notificationsOpen && (
-            <div className="absolute right-0 mt-2 w-80 overflow-hidden rounded-xl border border-border-dark bg-bg-card shadow-card">
-              <div className="border-b border-border-dark px-4 py-3">
-                <p className="text-sm font-medium text-text-primary">Recent activity</p>
-                <p className="text-xs text-text-muted">{unreadCount} active complaint updates</p>
+            <div className="absolute right-0 mt-2 w-80 overflow-hidden rounded-xl border border-border-soft bg-overlay shadow-card">
+              <div className="border-b border-border-soft px-4 py-3">
+                <p className="text-sm font-medium text-text-high">Recent activity</p>
+                <p className="text-xs text-text-mid">{unreadCount} active complaint updates</p>
               </div>
               <div className="max-h-80 overflow-y-auto">
                 {notifications.length === 0 ? (
-                  <p className="px-4 py-6 text-sm text-text-muted">No complaint activity yet.</p>
+                  <p className="px-4 py-6 text-sm text-text-mid">No complaint activity yet.</p>
                 ) : (
                   notifications.map((item) => (
-                    <div key={item.id} className="flex gap-3 border-b border-border-dark px-4 py-3 last:border-b-0">
+                    <div key={item.id} className="flex gap-3 border-b border-border-soft px-4 py-3 last:border-b-0">
                       {item.status === "resolved" ? (
-                        <CheckCircle2 className="mt-0.5 shrink-0 text-accent-green" size={16} />
+                        <CheckCircle2 className="mt-0.5 shrink-0 text-success" size={16} />
                       ) : (
-                        <Clock3 className="mt-0.5 shrink-0 text-accent-blue" size={16} />
+                        <Clock3 className="mt-0.5 shrink-0 text-primary" size={16} />
                       )}
                       <div className="min-w-0">
-                        <p className="truncate text-sm text-text-primary">{item.title}</p>
-                        <p className="mt-1 text-xs capitalize text-text-muted">{statusCopy[item.status]}</p>
+                        <p className="truncate text-sm text-text-high">{item.title}</p>
+                        <p className="mt-1 text-xs capitalize text-text-mid">{statusCopy[item.status]}</p>
                       </div>
                     </div>
                   ))
@@ -136,28 +143,31 @@ function Navbar({ onMenuToggle }) {
               setProfileOpen(!profileOpen);
               setNotificationsOpen(false);
             }}
-            className="flex items-center gap-3 rounded-xl border border-border-dark bg-bg-surface px-2 py-1.5 transition-all duration-150 hover:border-accent-blue/40 active:scale-[0.97]"
+            className="flex cursor-pointer items-center gap-3 rounded-xl border border-border-soft bg-overlay px-2 py-1.5 transition-all duration-150 hover:border-border-med active:scale-[0.97]"
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-accent-blue to-accent-teal text-xs font-semibold text-white">
+            <div
+              className="flex h-8 w-8 items-center justify-center rounded-full text-xs font-semibold text-white"
+              style={{ background: "linear-gradient(135deg,#FF6B35,#A78BFA)" }}
+            >
               {initials || "HC"}
             </div>
             <div className="hidden text-left sm:block">
-              <p className="text-sm font-medium text-text-primary">{user?.name}</p>
-              <p className="text-[11px] capitalize text-text-muted">{user?.role}</p>
+              <p className="text-sm font-medium text-text-high">{user?.name}</p>
+              <p className="text-[11px] capitalize text-text-mid">{user?.role}</p>
             </div>
-            <ChevronDown size={16} className="text-text-muted" />
+            <ChevronDown size={16} className="text-text-mid" />
           </button>
 
           {profileOpen && (
-            <div className="absolute right-0 mt-2 w-48 overflow-hidden rounded-xl border border-border-dark bg-bg-card shadow-card">
-              <div className="border-b border-border-dark px-4 py-3">
-                <p className="text-sm font-medium text-text-primary">{user?.name}</p>
-                <p className="text-xs capitalize text-text-muted">{user?.role}</p>
+            <div className="absolute right-0 mt-2 w-48 overflow-hidden rounded-xl border border-border-soft bg-overlay shadow-card">
+              <div className="border-b border-border-soft px-4 py-3">
+                <p className="text-sm font-medium text-text-high">{user?.name}</p>
+                <p className="text-xs capitalize text-text-mid">{user?.role}</p>
               </div>
               <button
                 type="button"
                 onClick={logout}
-                className="flex w-full items-center gap-2 px-4 py-3 text-sm text-accent-red transition-all duration-150 hover:bg-accent-red/10 active:scale-[0.97]"
+                className="flex w-full cursor-pointer items-center gap-2 px-4 py-3 text-sm text-danger transition-all duration-150 hover:bg-danger-dim active:scale-[0.97]"
               >
                 <LogOut size={16} />
                 Logout

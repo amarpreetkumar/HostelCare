@@ -6,11 +6,11 @@ function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-bg-primary text-text-primary">
+    <div className="min-h-screen bg-root text-text-high">
       <Navbar onMenuToggle={() => setSidebarOpen(true)} />
       <div className="flex">
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <main className="min-h-[calc(100vh-3.5rem)] flex-1 overflow-y-auto bg-bg-primary p-4 md:p-8">
+        <main className="min-h-[calc(100vh-3.5rem)] flex-1 overflow-y-auto bg-root p-4 md:p-8">
           {children}
         </main>
       </div>

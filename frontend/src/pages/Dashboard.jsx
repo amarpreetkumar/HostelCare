@@ -16,15 +16,15 @@ import {
 import Layout from "../components/Layout";
 import API from "../services/api";
 
-const statusColors = ["#F5A623", "#4F7EF7", "#22C97A"];
+const statusColors = ["#FFAA00", "#FF5370", "#3ECF8E"];
 
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
 
   return (
-    <div className="rounded-xl border border-border-dark bg-bg-card px-3 py-2 shadow-card">
-      {label && <p className="text-xs text-text-muted">{label}</p>}
-      <p className="text-sm font-semibold text-text-primary">{payload[0].value}</p>
+    <div className="rounded-[10px] border border-border-soft bg-overlay px-3 py-2 shadow-card">
+      {label && <p className="text-[11px] text-text-mid">{label}</p>}
+      <p className="text-[13px] font-semibold text-text-high">{payload[0].value}</p>
     </div>
   );
 }
@@ -72,10 +72,10 @@ function Dashboard() {
   }, [complaints]);
 
   const stats = [
-    { label: role === "staff" ? "Assigned" : "Total Complaints", value: total, color: "accent-blue", icon: ClipboardList, hint: role === "staff" ? "Assigned to you" : "All time submissions" },
-    { label: "Pending", value: pending, color: "accent-amber", icon: Clock3, hint: "Awaiting review" },
-    { label: "In Progress", value: inProgress, color: "accent-red", icon: AlertCircle, hint: "Currently active" },
-    { label: "Resolved", value: resolved, color: "accent-green", icon: CheckCircle2, hint: "Completed requests" },
+    { label: role === "staff" ? "Assigned" : "Total Complaints", value: total, border: "border-l-[#FF6B35]", text: "text-primary", icon: ClipboardList, hint: role === "staff" ? "Assigned to you" : "All time submissions" },
+    { label: "Pending", value: pending, border: "border-l-[#FFAA00]", text: "text-secondary", icon: Clock3, hint: "Awaiting review" },
+    { label: "In Progress", value: inProgress, border: "border-l-[#FF5370]", text: "text-danger", icon: AlertCircle, hint: "Currently active" },
+    { label: "Resolved", value: resolved, border: "border-l-[#3ECF8E]", text: "text-success", icon: CheckCircle2, hint: "Completed requests" },
   ];
 
   const latestComplaint = complaints[0];
@@ -138,17 +138,18 @@ function Dashboard() {
   return (
     <Layout>
       <section className="space-y-5">
-        <header className="animate-fade stagger-1 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <header className="animate-fadeup delay-1 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
             <h1 className="font-display text-3xl font-semibold">
               {role === "admin" ? "Admin Dashboard" : "Dashboard"}
             </h1>
-            <p className="mt-2 text-sm text-text-muted">Welcome back, {user?.name}</p>
+            <p className="mt-2 text-sm text-text-mid">Welcome back, {user?.name}</p>
           </div>
           {role === "student" && (
             <Link
               to="/create"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-accent-blue to-accent-purple px-4 py-3 text-sm font-medium text-white transition-all duration-150 hover:brightness-110 active:scale-[0.97]"
+              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-all duration-150 hover:brightness-110 active:scale-[0.97]"
+              style={{ background: "linear-gradient(135deg,#FF6B35,#E85A25)", boxShadow: "0 2px 12px rgba(255,107,53,0.3)" }}
             >
               <Plus size={16} />
               New Complaint
@@ -157,28 +158,27 @@ function Dashboard() {
         </header>
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {stats.map(({ label, value, color, icon: Icon, hint }, index) => (
+          {stats.map(({ label, value, border, text, icon: Icon, hint }, index) => (
             <article
               key={label}
-              className={`animate-fade stagger-${index + 2} relative overflow-hidden rounded-2xl border border-border-dark border-l-4 bg-bg-card p-5 shadow-card`}
-              style={{ borderLeftColor: `var(--${color})` }}
+              className={`animate-fadeup delay-${index + 2} relative overflow-hidden rounded-card border border-border-soft border-l-4 bg-elevated p-5 shadow-card shadow-inner-soft ${border}`}
             >
-              <p className="text-xs font-semibold uppercase tracking-wider text-text-muted">{label}</p>
-              <p className="mt-2 font-display text-3xl font-semibold" style={{ color: `var(--${color})` }}>
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-text-low">{label}</p>
+              <p className={`mt-2 font-display text-3xl font-semibold ${text}`}>
                 {value}
               </p>
-              <p className="mt-1 text-xs text-text-muted">{hint}</p>
-              <Icon className="absolute right-4 top-1/2 -translate-y-1/2 opacity-5" size={48} />
+              <p className="mt-1 text-xs text-text-low">{hint}</p>
+              <Icon className="absolute right-3 top-1/2 h-14 w-14 -translate-y-1/2 opacity-[0.04]" />
             </article>
           ))}
         </div>
 
         <div className={`grid gap-5 ${role === "admin" ? "lg:grid-cols-2" : "lg:grid-cols-[minmax(0,1fr)_340px]"}`}>
-          <article className="animate-fade stagger-5 rounded-2xl border border-border-dark bg-bg-card p-6 shadow-card">
+          <article className="animate-fadeup delay-5 rounded-card border border-border-soft bg-elevated p-6 shadow-card">
             <h2 className="mb-4 text-sm font-semibold">Complaint Status Overview</h2>
             <div className="mb-4 flex flex-wrap gap-4">
               {chartData.map((item, index) => (
-                <div key={item.name} className="flex items-center gap-2 text-xs text-text-muted">
+                <div key={item.name} className="flex items-center gap-2 text-xs text-text-mid">
                   <span className="h-2.5 w-2.5 rounded-sm" style={{ backgroundColor: statusColors[index] }} />
                   {item.name} {item.value}
                 </div>
@@ -187,7 +187,7 @@ function Dashboard() {
             <div className="relative h-56">
               <ResponsiveContainer>
                 <PieChart>
-                  <Pie data={chartData} dataKey="value" innerRadius={70} outerRadius={100} paddingAngle={3}>
+                  <Pie data={chartData} dataKey="value" innerRadius={68} outerRadius={98} paddingAngle={3} stroke="none">
                     {chartData.map((entry, index) => (
                       <Cell key={entry.name} fill={statusColors[index]} />
                     ))}
@@ -197,42 +197,42 @@ function Dashboard() {
               </ResponsiveContainer>
               <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
                 <span className="font-display text-3xl font-semibold">{total}</span>
-                <span className="text-xs text-text-muted">Total</span>
+                <span className="text-xs text-text-mid">Total</span>
               </div>
             </div>
           </article>
 
           {role === "admin" ? (
-            <article className="animate-fade stagger-6 rounded-2xl border border-border-dark bg-bg-card p-6 shadow-card">
+            <article className="animate-fadeup delay-6 rounded-card border border-border-soft bg-elevated p-6 shadow-card">
               <h2 className="mb-5 text-sm font-semibold">Resolution Rate by Category</h2>
               {[
-                ["Electricity", "67%", "bg-accent-blue"],
-                ["Water/Plumbing", "50%", "bg-accent-teal"],
-                ["Cleaning", "100%", "bg-accent-green"],
-                ["Furniture", "0%", "bg-accent-red"],
+                ["Electricity", "67%", "bg-primary"],
+                ["Water/Plumbing", "50%", "bg-info"],
+                ["Cleaning", "100%", "bg-success"],
+                ["Furniture", "0%", "bg-danger"],
               ].map(([label, value, color]) => (
                 <div key={label} className="mb-5 last:mb-0">
                   <div className="mb-2 flex justify-between text-sm">
                     <span>{label}</span>
-                    <span className="text-text-muted">{value}</span>
+                    <span className="text-text-mid">{value}</span>
                   </div>
-                  <div className="h-2 rounded-full bg-bg-surface">
-                    <div className={`h-2 rounded-full transition-all duration-700 ${color}`} style={{ width: value }} />
+                  <div className="h-2 rounded-full bg-subtle">
+                    <div className={`h-2 rounded-full transition-all duration-150 ${color}`} style={{ width: value }} />
                   </div>
                 </div>
               ))}
             </article>
           ) : (
-            <article className="animate-fade stagger-6 rounded-2xl border border-border-dark bg-bg-card p-6 shadow-card">
+            <article className="animate-fadeup delay-6 rounded-card border border-border-soft bg-elevated p-6 shadow-card">
               <h2 className="mb-4 text-sm font-semibold">By Category</h2>
               <div className="h-64">
                 <ResponsiveContainer>
                   <BarChart data={categoryData}>
-                    <CartesianGrid stroke="rgba(255,255,255,0.05)" vertical={false} />
-                    <XAxis dataKey="name" tick={{ fill: "#8B95A8", fontSize: 12 }} axisLine={false} tickLine={false} />
-                    <YAxis tick={{ fill: "#8B95A8", fontSize: 12 }} axisLine={false} tickLine={false} />
+                    <CartesianGrid stroke="rgba(255,255,255,0.04)" vertical={false} />
+                    <XAxis dataKey="name" tick={{ fill: "#5C5C6E", fontSize: 12 }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fill: "#5C5C6E", fontSize: 12 }} axisLine={false} tickLine={false} />
                     <Tooltip content={<CustomTooltip />} />
-                    <Bar dataKey="count" fill="#4F7EF7" radius={[6, 6, 0, 0]} />
+                    <Bar dataKey="count" fill="#FF6B35" radius={[7, 7, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -241,10 +241,10 @@ function Dashboard() {
         </div>
 
         {role === "student" && latestComplaint && (
-          <article className="animate-fade stagger-6 rounded-2xl border border-border-dark bg-bg-card p-6 shadow-card">
+          <article className="animate-fadeup delay-6 rounded-card border border-border-soft bg-elevated p-6 shadow-card">
             <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
               <h2 className="text-sm font-semibold">Complaint Lifecycle</h2>
-              <span className="text-xs text-text-muted">
+              <span className="text-xs text-text-mid">
                 {latestComplaint.title} #{latestComplaint._id?.slice(-6).toUpperCase()}
               </span>
             </div>
@@ -255,33 +255,34 @@ function Dashboard() {
                     <div
                       className={`flex h-10 w-10 items-center justify-center rounded-full border-2 ${
                         state === "done"
-                          ? "border-accent-green bg-accent-green/15 text-accent-green"
+                          ? "border-success bg-[#3ECF8E18] text-success"
                           : state === "active"
-                            ? "border-accent-blue bg-accent-blue/15 text-accent-blue"
-                            : "border-border-dark bg-bg-surface text-text-muted"
+                            ? "pulse-ember border-primary bg-[#FF6B3518] text-primary"
+                            : "border-border-soft bg-subtle text-text-low"
                       }`}
                     >
                       {state === "done" ? <CheckCircle2 size={18} /> : state === "active" ? <Clock3 size={18} /> : <AlertCircle size={18} />}
                     </div>
                     <p className="mt-3 text-xs font-medium">{label}</p>
-                    <p className="mt-1 text-[10px] text-text-muted">{date}</p>
+                    <p className="mt-1 text-[10px] text-text-low">{date}</p>
                   </div>
                   {index < 3 && (
                     <div
                       className={`hidden h-0.5 self-start md:mt-5 md:block ${
                         lifecycleSteps[index + 1].state === "done"
-                          ? "bg-accent-green"
+                          ? "bg-success"
                           : lifecycleSteps[index + 1].state === "active"
-                            ? "bg-gradient-to-r from-accent-green to-accent-blue"
-                            : "border-t border-dashed border-border-dark"
+                            ? ""
+                            : "bg-border-soft"
                       }`}
+                      style={lifecycleSteps[index + 1].state === "active" ? { background: "linear-gradient(90deg,#3ECF8E,#FF6B35)" } : undefined}
                     />
                   )}
                 </div>
               ))}
             </div>
-            <div className="mt-6 flex items-start gap-3 rounded-xl border border-accent-blue/20 bg-accent-blue/[0.08] p-3 text-sm text-text-primary">
-              <Info className="mt-0.5 shrink-0 text-accent-blue" size={16} />
+            <div className="mt-6 flex items-start gap-3 rounded-xl border border-[#A78BFA30] bg-[#A78BFA18] p-3 text-sm text-info">
+              <Info className="mt-0.5 shrink-0 text-info" size={16} />
               <p>{lifecycleMessage}</p>
             </div>
           </article>

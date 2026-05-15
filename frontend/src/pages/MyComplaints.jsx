@@ -36,21 +36,22 @@ function MyComplaints() {
   return (
     <Layout>
       <section className="space-y-5">
-        <header className="animate-fade stagger-1 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <header className="animate-fadeup delay-1 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
             <h1 className="font-display text-3xl font-semibold">My Complaints</h1>
-            <p className="mt-2 text-sm text-text-muted">Track all submitted complaints</p>
+            <p className="mt-2 text-sm text-text-mid">Track all submitted complaints</p>
           </div>
           <Link
             to="/create"
-            className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-accent-blue to-accent-purple px-4 py-3 text-sm font-medium text-white transition-all duration-150 hover:brightness-110 active:scale-[0.97]"
+            className="inline-flex cursor-pointer items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold text-white transition-all duration-150 hover:brightness-110 active:scale-[0.97]"
+            style={{ background: "linear-gradient(135deg,#FF6B35,#E85A25)", boxShadow: "0 2px 12px rgba(255,107,53,0.3)" }}
           >
             New Complaint
           </Link>
         </header>
 
-        <div className="animate-fade stagger-2 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-wrap gap-2">
+        <div className="animate-fadeup delay-2 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div className="flex gap-1.5 rounded-xl border border-border-soft bg-base p-1">
             {[
               ["all", "All"],
               ["pending", "Pending"],
@@ -61,10 +62,10 @@ function MyComplaints() {
                 key={value}
                 type="button"
                 onClick={() => setFilter(value)}
-                className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-150 active:scale-[0.97] ${
+                className={`cursor-pointer rounded-lg px-4 py-1.5 text-xs font-semibold transition-all duration-150 hover:text-text-high active:scale-[0.97] ${
                   filter === value
-                    ? "bg-accent-blue text-white"
-                    : "border border-border-dark bg-bg-surface text-text-muted hover:text-text-primary"
+                    ? "border border-border-soft bg-elevated text-text-high shadow-card"
+                    : "text-text-low"
                 }`}
               >
                 {label}
@@ -72,13 +73,13 @@ function MyComplaints() {
             ))}
           </div>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" size={16} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-text-low" size={16} />
             <input
               type="text"
               placeholder="Search complaints..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-lg border border-border-dark bg-bg-surface py-2 pl-9 pr-3 text-sm text-text-primary outline-none placeholder:text-text-muted focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30 md:w-64"
+              className="w-full rounded-xl border border-border-soft bg-subtle py-2.5 pl-9 pr-3 text-sm text-text-high outline-none transition-all duration-150 placeholder:text-text-low focus:border-primary focus:ring-2 focus:ring-[rgba(255,107,53,0.15)] md:w-64"
             />
           </div>
         </div>
@@ -93,16 +94,16 @@ function MyComplaints() {
         )}
 
         {!loading && filteredComplaints.length === 0 && (
-          <div className="animate-fade stagger-3 mt-16 text-center">
-            <Inbox className="mx-auto mb-3 text-text-muted" size={64} />
-            <p className="text-sm text-text-muted">No complaints found</p>
+          <div className="animate-fadeup delay-3 mt-16 text-center">
+            <Inbox className="mx-auto mb-3 text-text-low" size={64} />
+            <p className="text-sm text-text-mid">No complaints found</p>
             <button
               type="button"
               onClick={() => {
                 setFilter("all");
                 setSearch("");
               }}
-              className="mt-4 rounded-lg border border-border-dark bg-bg-surface px-4 py-2 text-sm text-text-primary transition-all duration-150 hover:border-accent-blue/40 active:scale-[0.97]"
+              className="mt-4 cursor-pointer rounded-xl border border-border-soft bg-overlay px-3 py-2 text-sm text-text-mid transition-all duration-150 hover:border-border-med hover:text-text-high active:scale-[0.97]"
             >
               Clear filters
             </button>

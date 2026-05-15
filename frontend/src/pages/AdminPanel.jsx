@@ -5,9 +5,9 @@ import Layout from "../components/Layout";
 import API from "../services/api";
 
 const statusStyles = {
-  pending: "border-accent-amber/20 bg-accent-amber/10 text-accent-amber",
-  "in-progress": "border-accent-blue/20 bg-accent-blue/10 text-accent-blue",
-  resolved: "border-accent-green/20 bg-accent-green/10 text-accent-green",
+  pending: "border border-[#FFAA0030] bg-[#FFAA0018] text-[#FFAA00]",
+  "in-progress": "border border-[#FF537030] bg-[#FF537018] text-[#FF5370]",
+  resolved: "border border-[#3ECF8E30] bg-[#3ECF8E18] text-[#3ECF8E]",
 };
 
 function AdminPanel() {
@@ -80,13 +80,13 @@ function AdminPanel() {
   return (
     <Layout>
       <section className="space-y-5">
-        <header className="animate-fade stagger-1">
+        <header className="animate-fadeup delay-1">
           <h1 className="font-display text-3xl font-semibold">Admin Panel</h1>
-          <p className="mt-2 text-sm text-text-muted">Manage and assign all hostel complaints</p>
+          <p className="mt-2 text-sm text-text-mid">Manage and assign all hostel complaints</p>
         </header>
 
-        <div className="animate-fade stagger-2 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-wrap gap-2">
+        <div className="animate-fadeup delay-2 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div className="flex gap-1.5 rounded-xl border border-border-soft bg-base p-1">
             {[
               ["all", "All"],
               ["pending", "Pending"],
@@ -97,10 +97,10 @@ function AdminPanel() {
                 key={value}
                 type="button"
                 onClick={() => setFilter(value)}
-                className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-150 active:scale-[0.97] ${
+                className={`cursor-pointer rounded-lg px-4 py-1.5 text-xs font-semibold transition-all duration-150 hover:text-text-high active:scale-[0.97] ${
                   filter === value
-                    ? "bg-accent-blue text-white"
-                    : "border border-border-dark bg-bg-surface text-text-muted hover:text-text-primary"
+                    ? "border border-border-soft bg-elevated text-text-high shadow-card"
+                    : "text-text-low"
                 }`}
               >
                 {label}
@@ -108,23 +108,23 @@ function AdminPanel() {
             ))}
           </div>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" size={16} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-text-low" size={16} />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search complaints"
-              className="w-full rounded-lg border border-border-dark bg-bg-surface py-2 pl-9 pr-3 text-sm text-text-primary outline-none placeholder:text-text-muted focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30 md:w-64"
+              className="w-full rounded-xl border border-border-soft bg-subtle py-2.5 pl-9 pr-3 text-sm text-text-high outline-none transition-all duration-150 placeholder:text-text-low focus:border-primary focus:ring-2 focus:ring-[rgba(255,107,53,0.15)] md:w-64"
             />
           </div>
         </div>
 
-        <div className="animate-fade stagger-3 overflow-hidden rounded-2xl border border-border-dark bg-bg-card shadow-card">
+        <div className="animate-fadeup delay-3 overflow-hidden rounded-card border border-border-soft bg-elevated shadow-card">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[860px]">
-              <thead className="bg-bg-secondary">
+              <thead className="bg-overlay">
                 <tr>
                   {["#", "Complaint", "Student", "Status", "Assign To", "Actions"].map((heading) => (
-                    <th key={heading} className="px-6 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-text-muted">
+                    <th key={heading} className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-widest text-text-low">
                       {heading}
                     </th>
                   ))}
@@ -132,22 +132,22 @@ function AdminPanel() {
               </thead>
               <tbody>
                 {filteredComplaints.map((complaint) => (
-                  <tr key={complaint._id} className="border-t border-border-dark transition-colors hover:bg-white/[0.02]">
-                    <td className="px-6 py-4 text-sm text-text-muted">{complaint._id?.slice(-6)}</td>
-                    <td className="px-6 py-4">
+                  <tr key={complaint._id} className="border-t border-border-soft transition-all duration-150 hover:bg-overlay/60">
+                    <td className="px-5 py-4 text-sm text-text-mid">{complaint._id?.slice(-6)}</td>
+                    <td className="px-5 py-4 text-sm text-text-high">
                       <p className="text-sm font-medium">{complaint.title}</p>
-                      <span className="mt-1 inline-flex rounded-full border border-border-dark bg-bg-surface px-2.5 py-1 text-[11px] text-text-muted">
+                      <span className="mt-1 inline-flex rounded-pill border border-border-soft bg-subtle px-2.5 py-1 text-[11px] text-text-mid">
                         {complaint.category}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm">{complaint.createdBy?.name}</td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold capitalize ${statusStyles[complaint.status] || ""}`}>
-                        <span className={`h-1.5 w-1.5 rounded-full bg-current ${complaint.status === "in-progress" ? "status-pulse" : ""}`} />
+                    <td className="px-5 py-4 text-sm text-text-high">{complaint.createdBy?.name}</td>
+                    <td className="px-5 py-4">
+                      <span className={`inline-flex items-center gap-1.5 rounded-pill px-2.5 py-[3px] text-[11px] font-semibold capitalize ${statusStyles[complaint.status] || ""}`}>
+                        <span className={`h-1.5 w-1.5 rounded-full bg-current ${complaint.status === "in-progress" ? "dot-pulse" : ""}`} />
                         {complaint.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-5 py-4">
                       <select
                         value={selectedStaff[complaint._id] || complaint.assignedTo?._id || ""}
                         onChange={(e) =>
@@ -156,7 +156,7 @@ function AdminPanel() {
                             [complaint._id]: e.target.value,
                           }))
                         }
-                        className="min-w-44 rounded-lg border border-border-dark bg-bg-surface px-3 py-2 text-xs text-text-primary outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
+                        className="min-w-44 cursor-pointer appearance-none rounded-xl border border-border-soft bg-subtle px-4 py-2.5 text-xs text-text-high outline-none transition-all duration-150 focus:border-primary focus:ring-2 focus:ring-[rgba(255,107,53,0.15)]"
                       >
                         <option value="">
                           {staffLoading
@@ -174,14 +174,14 @@ function AdminPanel() {
                         ))}
                       </select>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-5 py-4">
                       <button
                         type="button"
                         onClick={() => assignComplaint(complaint._id)}
-                        className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all duration-150 active:scale-[0.97] ${
+                        className={`cursor-pointer rounded-xl px-3 py-2 text-xs font-semibold transition-all duration-150 active:scale-[0.97] ${
                           complaint.assignedTo
-                            ? "border border-border-dark bg-bg-surface text-text-primary hover:border-accent-blue/40"
-                            : "border border-accent-blue/20 bg-accent-blue/10 text-accent-blue hover:bg-accent-blue hover:text-white"
+                            ? "border border-border-soft bg-overlay text-text-mid hover:border-border-med hover:text-text-high"
+                            : "border border-primary/20 bg-primary-dim text-primary hover:brightness-110"
                         }`}
                       >
                         {complaint.assignedTo ? "Reassign" : "Assign"}
@@ -194,7 +194,7 @@ function AdminPanel() {
           </div>
 
           {filteredComplaints.length === 0 && (
-            <p className="px-6 py-10 text-center text-sm text-text-muted">No complaints available.</p>
+            <p className="px-6 py-10 text-center text-sm text-text-mid">No complaints available.</p>
           )}
         </div>
       </section>

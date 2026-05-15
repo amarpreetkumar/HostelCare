@@ -22,14 +22,14 @@ function Register() {
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-bg-primary px-4">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(124,92,252,0.18),transparent_38%)]" />
-      <div className="animate-fade relative w-full max-w-sm rounded-2xl border border-border-dark bg-bg-card p-8 shadow-card">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-root px-4">
+      <div className="pointer-events-none fixed inset-0 z-0" style={{ background: "radial-gradient(ellipse 600px 500px at 50% 0%, rgba(255,107,53,0.07) 0%, transparent 70%)" }} />
+      <div className="animate-fadeup relative z-10 w-full max-w-sm rounded-2xl border border-border-soft bg-elevated p-8 shadow-card shadow-inner-soft">
         <div className="mb-8 text-center">
-          <h1 className="bg-gradient-to-r from-accent-blue to-accent-teal bg-clip-text font-display text-3xl font-semibold text-transparent">
+          <h1 className="font-display text-xl font-bold" style={{ background: "linear-gradient(135deg,#FF6B35,#FFAA00)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
             HostelCare
           </h1>
-          <p className="mt-2 text-sm text-text-muted">Create a new account</p>
+          <p className="mt-1 text-sm text-text-mid">Create a new account</p>
         </div>
 
         <form onSubmit={handleRegister} className="space-y-5">
@@ -39,7 +39,7 @@ function Register() {
             ["Password", "password", password, setPassword, "Create a password"],
           ].map(([label, type, value, setter, placeholder]) => (
             <div key={label}>
-              <label className="mb-2 block text-[11px] font-semibold uppercase tracking-wider text-text-muted">
+              <label className="mb-2 block text-[11px] font-semibold uppercase tracking-wider text-text-low">
                 {label}
               </label>
               <input
@@ -47,13 +47,13 @@ function Register() {
                 value={value}
                 onChange={(e) => setter(e.target.value)}
                 placeholder={placeholder}
-                className="w-full rounded-xl border border-border-dark bg-bg-surface px-4 py-3 text-sm text-text-primary outline-none transition-all placeholder:text-text-muted focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30"
+                className="w-full rounded-xl border border-border-soft bg-subtle px-4 py-2.5 text-sm text-text-high outline-none transition-all duration-150 placeholder:text-text-low focus:border-primary focus:ring-2 focus:ring-[rgba(255,107,53,0.15)]"
               />
             </div>
           ))}
 
           <div>
-            <label className="mb-2 block text-[11px] font-semibold uppercase tracking-wider text-text-muted">
+            <label className="mb-2 block text-[11px] font-semibold uppercase tracking-wider text-text-low">
               Role
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -62,10 +62,10 @@ function Register() {
                   key={option}
                   type="button"
                   onClick={() => setRole(option)}
-                  className={`rounded-xl border px-4 py-3 text-sm capitalize transition-all duration-150 active:scale-[0.97] ${
+                  className={`cursor-pointer rounded-xl border px-4 py-3 text-sm capitalize transition-all duration-150 active:scale-[0.97] ${
                     role === option
-                      ? "border-accent-blue bg-accent-blue text-white"
-                      : "border-border-dark bg-bg-surface text-text-muted hover:text-text-primary"
+                      ? "border-primary bg-primary text-white"
+                      : "border-border-soft bg-subtle text-text-mid hover:text-text-high"
                   }`}
                 >
                   {option}
@@ -76,14 +76,15 @@ function Register() {
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-gradient-to-r from-accent-blue to-accent-purple py-3 font-medium text-white transition-all duration-150 hover:brightness-110 active:scale-[0.97]"
+            className="w-full cursor-pointer rounded-xl py-2.5 font-semibold text-white transition-all duration-150 hover:brightness-110 active:scale-[0.97]"
+            style={{ background: "linear-gradient(135deg,#FF6B35,#E85A25)", boxShadow: "0 2px 12px rgba(255,107,53,0.3)" }}
           >
             Register
           </button>
 
-          <p className="text-center text-sm text-text-muted">
+          <p className="text-center text-sm text-text-mid">
             Already have an account?{" "}
-            <a href="/" className="font-medium text-accent-blue">
+            <a href="/" className="font-medium text-primary underline-offset-2 hover:text-[#E85A25]">
               Login
             </a>
           </p>

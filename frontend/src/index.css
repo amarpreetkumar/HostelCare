@@ -1,23 +1,26 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg-primary: #0d1117;
-  --bg-secondary: #161b27;
-  --bg-card: #1a2030;
-  --bg-surface: #1e2535;
-  --border-dark: #2a3348;
-  --accent-blue: #4f7ef7;
-  --accent-purple: #7c5cfc;
-  --accent-green: #22c97a;
-  --accent-amber: #f5a623;
-  --accent-red: #f0554e;
-  --accent-teal: #2dd4bf;
-  --text-primary: #e8edf5;
-  --text-muted: #8b95a8;
+  --bg-root: #0a0a0b;
+  --bg-base: #111113;
+  --bg-elevated: #18181c;
+  --bg-overlay: #1f1f25;
+  --bg-subtle: #26262e;
+  --border-soft: #2c2c36;
+  --border-med: #3a3a47;
+  --primary: #ff6b35;
+  --primary-dim: rgba(255, 107, 53, 0.12);
+  --secondary: #ffaa00;
+  --success: #3ecf8e;
+  --danger: #ff5370;
+  --info: #a78bfa;
+  --text-high: #f2f2f3;
+  --text-mid: #a0a0ae;
+  --text-low: #5c5c6e;
 }
 
 html {
@@ -25,7 +28,10 @@ html {
 }
 
 body {
-  @apply bg-bg-primary font-sans text-text-primary;
+  background: var(--bg-root);
+  color: var(--text-high);
+  font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 h1,
@@ -33,26 +39,31 @@ h2,
 h3,
 h4,
 .font-display {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: var(--bg-base);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--accent-blue);
-  border-radius: 3px;
+  background: var(--border-med);
+  border-radius: 99px;
 }
 
-@keyframes fadeSlideUp {
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+}
+
+@keyframes fadeUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -60,13 +71,23 @@ h4,
   }
 }
 
-@keyframes pulse-dot {
+@keyframes emberPulse {
   0%,
   100% {
-    opacity: 0.4;
+    box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.4);
   }
   50% {
+    box-shadow: 0 0 0 6px rgba(255, 107, 53, 0);
+  }
+}
+
+@keyframes dotPulse {
+  0%,
+  100% {
     opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
   }
 }
 
@@ -79,46 +100,51 @@ h4,
   }
 }
 
-.animate-fade {
+.animate-fadeup {
   opacity: 0;
-  animation: fadeSlideUp 0.4s ease forwards;
+  animation: fadeUp 0.4s ease forwards;
 }
 
-.stagger-1 {
+.delay-1 {
+  animation-delay: 0.05s;
+}
+
+.delay-2 {
   animation-delay: 0.1s;
 }
 
-.stagger-2 {
+.delay-3 {
+  animation-delay: 0.15s;
+}
+
+.delay-4 {
   animation-delay: 0.2s;
 }
 
-.stagger-3 {
+.delay-5 {
+  animation-delay: 0.25s;
+}
+
+.delay-6 {
   animation-delay: 0.3s;
 }
 
-.stagger-4 {
-  animation-delay: 0.4s;
+.pulse-ember {
+  animation: emberPulse 2s infinite;
 }
 
-.stagger-5 {
-  animation-delay: 0.5s;
+.dot-pulse {
+  animation: dotPulse 1.4s ease-in-out infinite;
 }
 
-.stagger-6 {
-  animation-delay: 0.6s;
-}
-
-.status-pulse {
-  animation: pulse-dot 1.4s ease-in-out infinite;
-}
-
-.skeleton-shimmer {
+.skeleton {
   background: linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.03) 25%,
-    rgba(255, 255, 255, 0.08) 50%,
-    rgba(255, 255, 255, 0.03) 75%
+    var(--bg-elevated) 25%,
+    var(--bg-overlay) 50%,
+    var(--bg-elevated) 75%
   );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 8px;
 }

@@ -32,7 +32,9 @@ exports.getMyComplaints = async (req, res) => {
   try {
     const complaints = await Complaint.find({
       createdBy: req.user.id,
-    }).sort({ createdAt: -1 });
+    })
+      .populate("assignedTo", "name email")
+      .sort({ createdAt: -1 });
 
     res.json(complaints);
   } catch (error) {

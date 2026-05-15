@@ -78,6 +78,63 @@ function Dashboard() {
     { label: "Resolved", value: resolved, color: "accent-green", icon: CheckCircle2, hint: "Completed requests" },
   ];
 
+  const latestComplaint = complaints[0];
+
+  const formatDate = (value) =>
+    value
+      ? new Date(value).toLocaleDateString("en-IN", {
+          month: "short",
+          day: "numeric",
+        })
+      : "Waiting";
+
+  const lifecycleSteps = useMemo(() => {
+    if (!latestComplaint) return [];
+
+    const isPending = latestComplaint.status === "pending";
+    const isInProgress = latestComplaint.status === "in-progress";
+    const isResolved = latestComplaint.status === "resolved";
+
+    return [
+      {
+        label: "Submitted",
+        date: formatDate(latestComplaint.createdAt),
+        state: "done",
+      },
+      {
+        label: "Reviewed",
+        date: isPending ? "Waiting" : formatDate(latestComplaint.updatedAt),
+        state: isPending ? "active" : "done",
+      },
+      {
+        label: "Assigned",
+        date: latestComplaint.assignedTo ? formatDate(latestComplaint.updatedAt) : "Waiting",
+        state: isResolved ? "done" : isInProgress ? "active" : "waiting",
+      },
+      {
+        label: "Resolved",
+        date: isResolved ? formatDate(latestComplaint.updatedAt) : "Waiting",
+        state: isResolved ? "done" : "waiting",
+      },
+    ];
+  }, [latestComplaint]);
+
+  const lifecycleMessage = useMemo(() => {
+    if (!latestComplaint) return "";
+
+    if (latestComplaint.status === "resolved") {
+      return "This complaint has been resolved successfully.";
+    }
+
+    if (latestComplaint.status === "in-progress") {
+      return `Your complaint is In Progress.${
+        latestComplaint.assignedTo?.name ? ` Staff member ${latestComplaint.assignedTo.name} has been assigned.` : ""
+      }`;
+    }
+
+    return "Your complaint has been submitted and is waiting for admin review.";
+  }, [latestComplaint]);
+
   return (
     <Layout>
       <section className="space-y-5">
@@ -183,19 +240,16 @@ function Dashboard() {
           )}
         </div>
 
-        {role === "student" && (
+        {role === "student" && latestComplaint && (
           <article className="animate-fade stagger-6 rounded-2xl border border-border-dark bg-bg-card p-6 shadow-card">
             <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
               <h2 className="text-sm font-semibold">Complaint Lifecycle</h2>
-              <span className="text-xs text-text-muted">Fan&apos;s Issue #HC-006</span>
+              <span className="text-xs text-text-muted">
+                {latestComplaint.title} #{latestComplaint._id?.slice(-6).toUpperCase()}
+              </span>
             </div>
             <div className="mt-6 grid gap-5 md:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] md:items-start">
-              {[
-                ["Submitted", "May 14", "done"],
-                ["Reviewed", "May 14", "done"],
-                ["Assigned", "May 15", "active"],
-                ["Resolved", "Waiting", "waiting"],
-              ].map(([label, date, state], index) => (
+              {lifecycleSteps.map(({ label, date, state }, index) => (
                 <div key={label} className="contents">
                   <div className="flex flex-col items-center text-center">
                     <div
@@ -215,7 +269,11 @@ function Dashboard() {
                   {index < 3 && (
                     <div
                       className={`hidden h-0.5 self-start md:mt-5 md:block ${
-                        index === 0 ? "bg-accent-green" : index === 1 ? "bg-gradient-to-r from-accent-green to-accent-blue" : "border-t border-dashed border-border-dark"
+                        lifecycleSteps[index + 1].state === "done"
+                          ? "bg-accent-green"
+                          : lifecycleSteps[index + 1].state === "active"
+                            ? "bg-gradient-to-r from-accent-green to-accent-blue"
+                            : "border-t border-dashed border-border-dark"
                       }`}
                     />
                   )}
@@ -224,7 +282,7 @@ function Dashboard() {
             </div>
             <div className="mt-6 flex items-start gap-3 rounded-xl border border-accent-blue/20 bg-accent-blue/[0.08] p-3 text-sm text-text-primary">
               <Info className="mt-0.5 shrink-0 text-accent-blue" size={16} />
-              <p>Your complaint is In Progress. Staff member Raj Kumar has been assigned and is working on the issue.</p>
+              <p>{lifecycleMessage}</p>
             </div>
           </article>
         )}
